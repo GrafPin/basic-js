@@ -20,13 +20,99 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor(boolValue) {
+    this.boolValue = boolValue;
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+
+  encrypt(message, key) {
+    let error = new Error("Incorrect arguments!");
+    if (message === undefined || key === undefined) {
+      throw error;
+    }
+    let arr = [];
+    let a;
+    let j = 0;
+    let x = 0;
+    let str = "";
+    for (let i = 0; i < message.length; i++) {
+      if (message[i].match(/[A-Za-z]/g) !== null) {
+        if (message[i] === message[i].toUpperCase()) {
+          x = message.charCodeAt(i) - 65;
+        }
+        else {
+          x = message.charCodeAt(i) - 97;
+        }
+
+        for (; ;) {
+          if (j == key.length) { j = 0; }
+          if (key[j].match(/[A-Za-z]/g) !== null) {
+            if (key[j] === key[j].toUpperCase()) {
+              a = (x + (key.charCodeAt(j) - 65)) % 26
+              arr.push(String.fromCharCode(a + 65));
+            }
+            else {
+              a = (x + (key.charCodeAt(j) - 97)) % 26
+              arr.push(String.fromCharCode(a + 97));
+            }
+            j++;
+            break;
+          }
+        }
+      }
+      else { arr.push(message[i]); }
+    }
+    if (this.boolValue === false) {
+      arr.reverse();
+    }
+    str = arr.join("");
+    return str.toUpperCase();
+  }
+
+
+
+  decrypt(message, key) {
+    let error = new Error("Incorrect arguments!");
+    if (message === undefined || key === undefined) {
+      throw error;
+    }
+    message = message.toLowerCase();
+    let arr = [];
+    let a;
+    let j = 0;
+    let x = 0;
+    let str = "";
+    for (let i = 0; i < message.length; i++) {
+      if (message[i].match(/[A-Za-z]/g) !== null) {
+        if (message[i] === message[i].toUpperCase()) {
+          x = message.charCodeAt(i) - 65;
+        }
+        else {
+          x = message.charCodeAt(i) - 97;
+        }
+
+        for (; ;) {
+          if (j == key.length) { j = 0; }
+          if (key[j].match(/[A-Za-z]/g) !== null) {
+            if (key[j] === key[j].toUpperCase()) {
+              a = (x - (key.charCodeAt(j) - 65) + 26) % 26;
+              arr.push(String.fromCharCode(a + 65));
+            }
+            else {
+              a = (x - (key.charCodeAt(j) - 97) + 26) % 26;
+              arr.push(String.fromCharCode(a + 97));
+            }
+            j++;
+            break;
+          }
+        }
+      }
+      else { arr.push(message[i]); }
+    }
+    if (this.boolValue === false) {
+      arr.reverse();
+    }
+    str = arr.join("");
+    return str.toUpperCase();
   }
 }
 
